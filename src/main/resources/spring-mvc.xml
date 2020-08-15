@@ -1,0 +1,74 @@
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xmlns:mvc="http://www.springframework.org/schema/mvc"
+          xmlns:aop="http://www.springframework.org/schema/aop"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context.xsd
+							http://www.springframework.org/schema/mvc
+							http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                            http://www.springframework.org/schema/aop
+							http://www.springframework.org/schema/aop/spring-aop.xsd
+">
+    <!-- 5,创建表现层对象 -->
+    <!-- 告知spring-mvc  哪些包中 存在 被注解的类
+         use-default-filters="false"  遇到到 @Controller  @Service  @Repository  @Component类，都会忽略
+    -->
+    <context:component-scan base-package="cn.edu.ncu" use-default-filters="false">
+        <!-- 只扫描  有@Controller注解的类 -->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 6,注解的处理器映射器和适配器 -->
+    <!-- 注册注解开发驱动 -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!-- 9,视图解析器 -->
+    <!-- 视图解析器
+	     作用：1.捕获后端控制器的返回值="index"
+	          2.解析： 在返回值的前后 拼接 ==> "/index.jsp"
+	 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 前缀 -->
+        <property name="prefix" value="/"></property>
+        <!-- 后缀 -->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+    <!-- 在项目中 自动添加一个 映射{"/**" : DefaultServletHttpRequestHandler}
+         请求进入前端后，会先匹配自定义的Handler，如果没有匹配的则进入DefaultServletHttpRequestHandler。
+         DefaultServletHttpRequestHandler会将请求转发给Tomcat中名为"default"的servlet。
+         最终实现了静态资源的访问
+    -->
+    <mvc:default-servlet-handler/>
+
+    <bean class="cn.edu.ncu.resolver.MyExceptionResolver"></bean>
+
+    <!-- enable shiro's annotation-->
+    <!-- 调用工厂中 Initializable 类型的组件的 init 方法 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!-- SpringMVC工厂启动时，如果发现了此配置 会在当前工厂中 多创建一个Bean(后处理器)，用来定制代理 -->
+    <aop:config></aop:config>
+    <!-- 在 此 bean 的 构 建 过 程 中 ， 初 始 化 了 ⼀ 些 额 外 功 能 和piontcut
+                interceptors.add(new RoleAnnotationMethodInterceptor(resolver));
+                interceptors.add(new PermissionAnnotationMethodInterceptor(resolver));
+                interceptors.add(new AuthenticatedAnnotationMethodInterceptor(resolver));
+                interceptors.add(new UserAnnotationMethodInterceptor(resolver));
+                interceptors.add(new GuestAnnotationMethodInterceptor(resolver));
+     -->
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!--文件上传的解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize">
+            <value>104857600</value>
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+</beans>

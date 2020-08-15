@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    dtd : document type definition    xxx.dtd  xxx2.dtd
+    xsd : xml schema definition       xxx.xsd  xxx2.xsd
+    文档约束：标签，顺序，层级，属性
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- shiro的配置 -->
+    <!-- Realm -->
+    <bean id="myRealm" class="cn.edu.ncu.realm.MyRealm">
+        <property name="userService" ref="userServiceImpl"/>
+        <property name="roleService" ref="roleServiceImpl"/>
+        <property name="permissionService" ref="permissionServiceImpl"/>
+        <!-- 密码比对器 -->
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <property name="hashAlgorithmName" value="SHA-256"/>
+                <!-- true means hex encoded, false means base64 encoded -->
+                <property name="storedCredentialsHexEncoded" value="false"/>
+                <property name="hashIterations" value="10000"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- SecurityManager -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myRealm"/>
+        <!-- 记住我管理器 -->
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+    <!-- ⽣产SpringShiroFilter
+    （ 持有shiro的过滤相关规则，可进⾏请求的过滤校验，校验请求是否合法 ）
+    -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 注入核心对象 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 未登录跳转路径 -->
+        <!--<property name="loginUrl" value="/user/login"/>-->
+        <!-- 没权限跳转路径 -->
+        <!--<property name="unauthorizedUrl" value="/user/perms/error"/>-->
+        <!-- 过滤器链 -->
+        <property name="filterChainDefinitions">
+            <value>
+                /user/all = authc,perms["user":"query2"]
+                /user/logout = logout
+            </value>
+        </property>
+    </bean>
+
+    <!-- remember me Cookie -->
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!-- rememberMe是cookie值中的key，value时⽤户名的密⽂
+        cookie["rememberMe":"deleteMe"] 此cookie每次登陆后都会写出，⽤于清除之前的cookie
+        cookie["rememberMe":username的密⽂] 此cookie也会在登录后写出，⽤于记录最新的username
+        （ops: 如上设计，既能保证每次登陆后重新记录cookie，也能保证切换账号时，记录最新账号）
+        -->
+        <property name="name" value="rememberMe"/>
+        <!-- cookie只在http请求中可⽤，那么通过js脚本将⽆法读取到cookie信息，有效防⽌cookie被窃取 -->
+        <property name="httpOnly" value="true"/>
+        <!-- cookie的⽣命周期，单位：秒 -->
+        <property name="maxAge" value="604800"/><!-- 7天 -->
+    </bean>
+
+    <!--记住我管理器-->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!-- 注⼊SimpleCookie -->
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+</beans>

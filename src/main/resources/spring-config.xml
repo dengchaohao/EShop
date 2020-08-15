@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    dtd : document type definition    xxx.dtd  xxx2.dtd
+    xsd : xml schema definition       xxx.xsd  xxx2.xsd
+    文档约束：标签，顺序，层级，属性
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 1,创建数据源 -->
+    <!-- 导入外部参数文件 -->
+    <context:property-placeholder location="classpath:database.properties"/>
+    <!-- 配置c3p0 数据源，读取 db.properties 中的属性-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <!-- c3p0连接池的私有属性 -->
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="10"/>
+        <!-- 关闭连接后不自动commit -->
+        <property name="autoCommitOnClose" value="false"/>
+        <!-- 获取连接超时时间 -->
+        <property name="checkoutTimeout" value="10000"/>
+        <!-- 当获取连接失败重试次数 -->
+        <property name="acquireRetryAttempts" value="2"/>
+    </bean>
+
+    <!-- 2,创建工厂 -->
+    <!-- SqlSessionFactory
+         配置: 1.连接池
+              2.mapper文件信息
+              3.别名-可选
+              4.插件-可选
+     -->
+    <bean id="sqlSessionFactory04" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- mapper文件
+             如果和dao接口在同包且同名，则如下注入可以省略
+         -->
+        <!--<property name="mapperLocations" value="classpath:com/qianfeng/dao/*.xml"/>-->
+        <!-- 别名 -->
+        <property name="typeAliasesPackage" value="cn.edu.ncu.pojo"/>
+    </bean>
+
+    <!-- 3,创建DAO的对象，这里使用扫描dao的包 -->
+    <!-- 扫描所有mapper，为每个dao定制实现类   sqlSession.getMapper(UserDAO.class)
+         DAO实现的对象会 纳入工厂，并且beanID=DAO的首字母小写接口类名=“userDAO”
+         1> DAO接口
+         2> DAO映射文件
+         3> SqlSession
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 如果当前工厂中 只有一个SqlSessionFactory,则此项注入可以省略 -->
+        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory04"/>-->
+        <!-- DAO接口位置 -->
+        <property name="basePackage" value="cn.edu.ncu.dao"/>
+    </bean>
+
+    <!-- 4,创建事务管理对象 注入数据源 -->
+    <!-- 事务管理器 -->
+    <bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 支持 @Transactional 实现事务 -->
+    <tx:annotation-driven transaction-manager="tx"/>
+    <!-- 配置注解扫描：让spring去发现注解，进而实现对应的功能 -->
+    <context:component-scan base-package="cn.edu.ncu">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+
+    <import resource="classpath:spring-activiti.xml"/>
+    <import resource="classpath:spring-shiro.xml"/>
+</beans>

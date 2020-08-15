@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.ncu.dao.RoleDAO">
+    <select id="queryAllRolenameByUsername" parameterType="string" resultType="string">
+        select t_role.role_name from t_staff join t_staff_role on t_staff.staff_code = t_staff_role.staff_code join t_role on t_role.role_code = t_staff_role.role_code WHERE t_staff.staff_name = #{username}
+    </select>
+</mapper>
