@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ncu.dao.AddressMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ncu.pojo.Address" >
+    <id column="ADDRESS_ID" property="addressId" jdbcType="DECIMAL" />
+    <result column="AREA_ID" property="areaId" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="CONTACT" property="contact" jdbcType="VARCHAR" />
+    <result column="IS_DEFAULT" property="isDefault" jdbcType="VARCHAR" />
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ADDRESS_ID, AREA_ID, USERNAME, MOBILE, ADDRESS, CONTACT, IS_DEFAULT, ZIP_CODE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.ncu.pojo.AddressExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from T_ADDRESS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ADDRESS
+    where ADDRESS_ID = #{addressId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from T_ADDRESS
+    where ADDRESS_ID = #{addressId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.edu.ncu.pojo.AddressExample" >
+    delete from T_ADDRESS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ncu.pojo.Address" >
+    insert into T_ADDRESS (ADDRESS_ID, AREA_ID, USERNAME, 
+      MOBILE, ADDRESS, CONTACT, 
+      IS_DEFAULT, ZIP_CODE)
+    values (#{addressId,jdbcType=DECIMAL}, #{areaId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{isDefault,jdbcType=VARCHAR}, #{zipCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ncu.pojo.Address" >
+    insert into T_ADDRESS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="addressId != null" >
+        ADDRESS_ID,
+      </if>
+      <if test="areaId != null" >
+        AREA_ID,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="contact != null" >
+        CONTACT,
+      </if>
+      <if test="isDefault != null" >
+        IS_DEFAULT,
+      </if>
+      <if test="zipCode != null" >
+        ZIP_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="addressId != null" >
+        #{addressId,jdbcType=DECIMAL},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null" >
+        #{isDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.edu.ncu.pojo.AddressExample" resultType="java.lang.Integer" >
+    select count(*) from T_ADDRESS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_ADDRESS
+    <set >
+      <if test="record.addressId != null" >
+        ADDRESS_ID = #{record.addressId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.areaId != null" >
+        AREA_ID = #{record.areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null" >
+        USERNAME = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null" >
+        MOBILE = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contact != null" >
+        CONTACT = #{record.contact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDefault != null" >
+        IS_DEFAULT = #{record.isDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zipCode != null" >
+        ZIP_CODE = #{record.zipCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_ADDRESS
+    set ADDRESS_ID = #{record.addressId,jdbcType=DECIMAL},
+      AREA_ID = #{record.areaId,jdbcType=VARCHAR},
+      USERNAME = #{record.username,jdbcType=VARCHAR},
+      MOBILE = #{record.mobile,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      CONTACT = #{record.contact,jdbcType=VARCHAR},
+      IS_DEFAULT = #{record.isDefault,jdbcType=VARCHAR},
+      ZIP_CODE = #{record.zipCode,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ncu.pojo.Address" >
+    update T_ADDRESS
+    <set >
+      <if test="areaId != null" >
+        AREA_ID = #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null" >
+        IS_DEFAULT = #{isDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        ZIP_CODE = #{zipCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ADDRESS_ID = #{addressId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ncu.pojo.Address" >
+    update T_ADDRESS
+    set AREA_ID = #{areaId,jdbcType=VARCHAR},
+      USERNAME = #{username,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      CONTACT = #{contact,jdbcType=VARCHAR},
+      IS_DEFAULT = #{isDefault,jdbcType=VARCHAR},
+      ZIP_CODE = #{zipCode,jdbcType=VARCHAR}
+    where ADDRESS_ID = #{addressId,jdbcType=DECIMAL}
+  </update>
+</mapper>

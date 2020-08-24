@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ncu.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ncu.pojo.User" >
+    <id column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="NICK_NAME" property="nickName" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="HEAD_PIC" property="headPic" jdbcType="VARCHAR" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="IS_MOBILE_CHECK" property="isMobileCheck" jdbcType="VARCHAR" />
+    <result column="IS_EMAIL_CHECK" property="isEmailCheck" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="VERIFY_CODE" property="verifyCode" jdbcType="VARCHAR" />
+    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+    <result column="SALT" property="salt" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="queryUserByUsername" parameterType="string" resultType="User">
+        select username,password,salt
+        from t_user
+        where username = #{username}
+  </select>
+
+  <insert id="insertUser" parameterType="User">
+        insert into t_user(username,phone,email,password,salt) values(#{username},#{phone},#{email},#{password},#{salt})
+  </insert>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    USERNAME, PASSWORD, PHONE, EMAIL, CREATE_TIME, UPDATE_TIME, NICK_NAME, NAME, STATUS, 
+    HEAD_PIC, QQ, IS_MOBILE_CHECK, IS_EMAIL_CHECK, SEX, BIRTHDAY, LAST_LOGIN_TIME, VERIFY_CODE, 
+    IDCARD, SALT
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.ncu.pojo.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from T_USER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_USER
+    where USERNAME = #{username,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_USER
+    where USERNAME = #{username,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.edu.ncu.pojo.UserExample" >
+    delete from T_USER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ncu.pojo.User" >
+    insert into T_USER (USERNAME, PASSWORD, PHONE, 
+      EMAIL, CREATE_TIME, UPDATE_TIME, 
+      NICK_NAME, NAME, STATUS, 
+      HEAD_PIC, QQ, IS_MOBILE_CHECK, 
+      IS_EMAIL_CHECK, SEX, BIRTHDAY, 
+      LAST_LOGIN_TIME, VERIFY_CODE, IDCARD, 
+      SALT)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{nickName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{headPic,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{isMobileCheck,jdbcType=VARCHAR}, 
+      #{isEmailCheck,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{verifyCode,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ncu.pojo.User" >
+    insert into T_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="nickName != null" >
+        NICK_NAME,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="headPic != null" >
+        HEAD_PIC,
+      </if>
+      <if test="qq != null" >
+        QQ,
+      </if>
+      <if test="isMobileCheck != null" >
+        IS_MOBILE_CHECK,
+      </if>
+      <if test="isEmailCheck != null" >
+        IS_EMAIL_CHECK,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY,
+      </if>
+      <if test="lastLoginTime != null" >
+        LAST_LOGIN_TIME,
+      </if>
+      <if test="verifyCode != null" >
+        VERIFY_CODE,
+      </if>
+      <if test="idcard != null" >
+        IDCARD,
+      </if>
+      <if test="salt != null" >
+        SALT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null" >
+        #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="isMobileCheck != null" >
+        #{isMobileCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="isEmailCheck != null" >
+        #{isEmailCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="verifyCode != null" >
+        #{verifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.edu.ncu.pojo.UserExample" resultType="java.lang.Integer" >
+    select count(*) from T_USER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_USER
+    <set >
+      <if test="record.username != null" >
+        USERNAME = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        PHONE = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.nickName != null" >
+        NICK_NAME = #{record.nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headPic != null" >
+        HEAD_PIC = #{record.headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq != null" >
+        QQ = #{record.qq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isMobileCheck != null" >
+        IS_MOBILE_CHECK = #{record.isMobileCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isEmailCheck != null" >
+        IS_EMAIL_CHECK = #{record.isEmailCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        SEX = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthday != null" >
+        BIRTHDAY = #{record.birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastLoginTime != null" >
+        LAST_LOGIN_TIME = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.verifyCode != null" >
+        VERIFY_CODE = #{record.verifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idcard != null" >
+        IDCARD = #{record.idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salt != null" >
+        SALT = #{record.salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_USER
+    set USERNAME = #{record.username,jdbcType=VARCHAR},
+      PASSWORD = #{record.password,jdbcType=VARCHAR},
+      PHONE = #{record.phone,jdbcType=VARCHAR},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      NICK_NAME = #{record.nickName,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      HEAD_PIC = #{record.headPic,jdbcType=VARCHAR},
+      QQ = #{record.qq,jdbcType=VARCHAR},
+      IS_MOBILE_CHECK = #{record.isMobileCheck,jdbcType=VARCHAR},
+      IS_EMAIL_CHECK = #{record.isEmailCheck,jdbcType=VARCHAR},
+      SEX = #{record.sex,jdbcType=VARCHAR},
+      BIRTHDAY = #{record.birthday,jdbcType=TIMESTAMP},
+      LAST_LOGIN_TIME = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      VERIFY_CODE = #{record.verifyCode,jdbcType=VARCHAR},
+      IDCARD = #{record.idcard,jdbcType=VARCHAR},
+      SALT = #{record.salt,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ncu.pojo.User" >
+    update T_USER
+    <set >
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nickName != null" >
+        NICK_NAME = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null" >
+        HEAD_PIC = #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        QQ = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="isMobileCheck != null" >
+        IS_MOBILE_CHECK = #{isMobileCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="isEmailCheck != null" >
+        IS_EMAIL_CHECK = #{isEmailCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null" >
+        LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="verifyCode != null" >
+        VERIFY_CODE = #{verifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        IDCARD = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        SALT = #{salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USERNAME = #{username,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ncu.pojo.User" >
+    update T_USER
+    set PASSWORD = #{password,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      NICK_NAME = #{nickName,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      HEAD_PIC = #{headPic,jdbcType=VARCHAR},
+      QQ = #{qq,jdbcType=VARCHAR},
+      IS_MOBILE_CHECK = #{isMobileCheck,jdbcType=VARCHAR},
+      IS_EMAIL_CHECK = #{isEmailCheck,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+      LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=TIMESTAMP},
+      VERIFY_CODE = #{verifyCode,jdbcType=VARCHAR},
+      IDCARD = #{idcard,jdbcType=VARCHAR},
+      SALT = #{salt,jdbcType=VARCHAR}
+    where USERNAME = #{username,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ncu.dao.OrderDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ncu.pojo.OrderDetail" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="GOODS_ID" property="goodsId" jdbcType="DECIMAL" />
+    <result column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
+    <result column="NUM" property="num" jdbcType="DECIMAL" />
+    <result column="TOTAL_FEE" property="totalFee" jdbcType="DECIMAL" />
+    <result column="EVALUATE" property="evaluate" jdbcType="VARCHAR" />
+    <result column="SPEC_OPTION" property="specOption" jdbcType="VARCHAR" />
+    <result column="SCORE" property="score" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="REPLY" property="reply" jdbcType="VARCHAR" />
+    <result column="COMMENT_TIME" property="commentTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="queryGoodsAndOrderDetailByOrderId" parameterType="string" resultType="GoodsAndOrderDetailDTO">
+        select name title,price,num ,cart_img_url picPath,remark content,od.ID orderDetailId from
+        t_order_detail od join t_goods g on od.goods_id = g.goods_id
+        join t_cart_img ci on ci.goods_id = od.goods_id and ci.spec = od.spec_option
+        where od.order_id = #{orderId}
+  </select>
+
+  <select id="queryGoodsAndOrderDetailById" parameterType="int" resultType="GoodsAndOrderDetailDTO">
+        select name title,price,num ,cart_img_url picPath,remark content,od.ID orderDetailId from
+        t_order_detail od join t_goods g on od.goods_id = g.goods_id
+        join t_cart_img ci on ci.goods_id = od.goods_id and ci.spec = od.spec_option
+        where od.id = #{id}
+  </select>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, GOODS_ID, ORDER_ID, NUM, TOTAL_FEE, EVALUATE, SPEC_OPTION, SCORE, REMARK, REPLY, 
+    COMMENT_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.ncu.pojo.OrderDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from T_ORDER_DETAIL
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ORDER_DETAIL
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from T_ORDER_DETAIL
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.edu.ncu.pojo.OrderDetailExample" >
+    delete from T_ORDER_DETAIL
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ncu.pojo.OrderDetail" >
+    insert into T_ORDER_DETAIL (ID, GOODS_ID, ORDER_ID, 
+      NUM, TOTAL_FEE, EVALUATE, 
+      SPEC_OPTION, SCORE, REMARK, 
+      REPLY, COMMENT_TIME)
+    values (#{id,jdbcType=DECIMAL}, #{goodsId,jdbcType=DECIMAL}, #{orderId,jdbcType=VARCHAR}, 
+      #{num,jdbcType=DECIMAL}, #{totalFee,jdbcType=DECIMAL}, #{evaluate,jdbcType=VARCHAR}, 
+      #{specOption,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{reply,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ncu.pojo.OrderDetail" >
+    insert into T_ORDER_DETAIL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="goodsId != null" >
+        GOODS_ID,
+      </if>
+      <if test="orderId != null" >
+        ORDER_ID,
+      </if>
+      <if test="num != null" >
+        NUM,
+      </if>
+      <if test="totalFee != null" >
+        TOTAL_FEE,
+      </if>
+      <if test="evaluate != null" >
+        EVALUATE,
+      </if>
+      <if test="specOption != null" >
+        SPEC_OPTION,
+      </if>
+      <if test="score != null" >
+        SCORE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="reply != null" >
+        REPLY,
+      </if>
+      <if test="commentTime != null" >
+        COMMENT_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=DECIMAL},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=DECIMAL},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluate != null" >
+        #{evaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="specOption != null" >
+        #{specOption,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="reply != null" >
+        #{reply,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.edu.ncu.pojo.OrderDetailExample" resultType="java.lang.Integer" >
+    select count(*) from T_ORDER_DETAIL
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_ORDER_DETAIL
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.goodsId != null" >
+        GOODS_ID = #{record.goodsId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderId != null" >
+        ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.num != null" >
+        NUM = #{record.num,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalFee != null" >
+        TOTAL_FEE = #{record.totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.evaluate != null" >
+        EVALUATE = #{record.evaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specOption != null" >
+        SPEC_OPTION = #{record.specOption,jdbcType=VARCHAR},
+      </if>
+      <if test="record.score != null" >
+        SCORE = #{record.score,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reply != null" >
+        REPLY = #{record.reply,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentTime != null" >
+        COMMENT_TIME = #{record.commentTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_ORDER_DETAIL
+    set ID = #{record.id,jdbcType=DECIMAL},
+      GOODS_ID = #{record.goodsId,jdbcType=DECIMAL},
+      ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      NUM = #{record.num,jdbcType=DECIMAL},
+      TOTAL_FEE = #{record.totalFee,jdbcType=DECIMAL},
+      EVALUATE = #{record.evaluate,jdbcType=VARCHAR},
+      SPEC_OPTION = #{record.specOption,jdbcType=VARCHAR},
+      SCORE = #{record.score,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      REPLY = #{record.reply,jdbcType=VARCHAR},
+      COMMENT_TIME = #{record.commentTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ncu.pojo.OrderDetail" >
+    update T_ORDER_DETAIL
+    <set >
+      <if test="goodsId != null" >
+        GOODS_ID = #{goodsId,jdbcType=DECIMAL},
+      </if>
+      <if test="orderId != null" >
+        ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        NUM = #{num,jdbcType=DECIMAL},
+      </if>
+      <if test="totalFee != null" >
+        TOTAL_FEE = #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluate != null" >
+        EVALUATE = #{evaluate,jdbcType=VARCHAR},
+      </if>
+      <if test="specOption != null" >
+        SPEC_OPTION = #{specOption,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        SCORE = #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="reply != null" >
+        REPLY = #{reply,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        COMMENT_TIME = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ncu.pojo.OrderDetail" >
+    update T_ORDER_DETAIL
+    set GOODS_ID = #{goodsId,jdbcType=DECIMAL},
+      ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      NUM = #{num,jdbcType=DECIMAL},
+      TOTAL_FEE = #{totalFee,jdbcType=DECIMAL},
+      EVALUATE = #{evaluate,jdbcType=VARCHAR},
+      SPEC_OPTION = #{specOption,jdbcType=VARCHAR},
+      SCORE = #{score,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      REPLY = #{reply,jdbcType=VARCHAR},
+      COMMENT_TIME = #{commentTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

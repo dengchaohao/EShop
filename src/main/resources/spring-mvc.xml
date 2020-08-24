@@ -31,17 +31,24 @@
 	          2.解析： 在返回值的前后 拼接 ==> "/index.jsp"
 	 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="contentType" value="text/html" />
         <!-- 前缀 -->
-        <property name="prefix" value="/"></property>
+        <property name="prefix" value="/WEB-INF/"/>
         <!-- 后缀 -->
         <property name="suffix" value=".jsp"></property>
+        <property name="order" value="0"></property>
     </bean>
     <!-- 在项目中 自动添加一个 映射{"/**" : DefaultServletHttpRequestHandler}
          请求进入前端后，会先匹配自定义的Handler，如果没有匹配的则进入DefaultServletHttpRequestHandler。
          DefaultServletHttpRequestHandler会将请求转发给Tomcat中名为"default"的servlet。
          最终实现了静态资源的访问
     -->
+    <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
+    <mvc:resources mapping="/img/**" location="/img/"/>
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
 
     <bean class="cn.edu.ncu.resolver.MyExceptionResolver"></bean>
 

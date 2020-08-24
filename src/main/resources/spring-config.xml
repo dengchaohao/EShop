@@ -55,7 +55,18 @@
          -->
         <!--<property name="mapperLocations" value="classpath:com/qianfeng/dao/*.xml"/>-->
         <!-- 别名 -->
-        <property name="typeAliasesPackage" value="cn.edu.ncu.pojo"/>
+        <property name="typeAliasesPackage" value="cn.edu.ncu.pojo,cn.edu.ncu.dto"/>
+        <!-- 配置mybatis分页插件PageHelper -->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!-- 什么都不配，使用默认的配置 -->
+                        <value></value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <!-- 3,创建DAO的对象，这里使用扫描dao的包 -->
@@ -84,6 +95,5 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
     </context:component-scan>
 
-    <import resource="classpath:spring-activiti.xml"/>
     <import resource="classpath:spring-shiro.xml"/>
 </beans>

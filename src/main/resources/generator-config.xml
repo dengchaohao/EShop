@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "E:\Apache\mybatis\mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <properties resource="database.properties"></properties>
+
+    <!--数据库驱动-->
+    <classPathEntry location="E:\\Apache\\apache-maven-3.5.2\\repository\\mysql\\mysql-connector-java\\8.0.18\\mysql-connector-java-8.0.18.jar"/>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库链接地址账号密码-->
+        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+                        connectionURL="jdbc:oracle:thin:@localhost:1521:ORCL"
+                        userId="eshopuser"
+                        password="eshopuser">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!--生成 Model 类存放位置-->
+        <javaModelGenerator targetPackage="cn.edu.ncu.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成映射文件存放位置-->
+        <sqlMapGenerator targetPackage="cn.edu.ncu.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--生成 Dao 类存放位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.edu.ncu.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!--<table tableName="t_address" domainObjectName="Address" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true"></table>-->
+                <!--<table tableName="t_area" domainObjectName="Area" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+        <!--<table tableName="tb_brand" domainObjectName="TbBrand" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+<!--
+                <table tableName="t_city" domainObjectName="City" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+<!--
+        <table tableName="tb_content" domainObjectName="TbContent" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+<!--
+        <table tableName="t_content_category" domainObjectName="ContentCategory" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+<!--
+          <table tableName="t_freight" domainObjectName="Freight" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+        <table tableName="t_freight_detail" domainObjectName="FreightDetail" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+
+        <!--
+        <table tableName="t_goods" domainObjectName="Goods" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+<!--
+        <table tableName="tb_goods_desc" domainObjectName="TbGoodsDesc" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+<!--
+        <table tableName="t_order" domainObjectName="Order" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+        <!--<table tableName="t_order_detail" domainObjectName="OrderDetail" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+<!--
+        <table tableName="tb_comment" domainObjectName="TbComment" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+
+        <!--        <table tableName="tb_pay_log" domainObjectName="TbPayLog" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+<!--
+                <table tableName="t_province" domainObjectName="Province" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+        <!--<table tableName="t_specification" domainObjectName="Specification" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+<!--
+        <table tableName="t_spec_option" domainObjectName="SpecificationOption" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+        <!--<table tableName="tb_type_template" domainObjectName="TbTypeTemplate" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+        <!--<table tableName="t_user" domainObjectName="User" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+
+        <!--<table tableName="t_cart_goods" domainObjectName="CartGoods" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+<!--
+        <table tableName="t_cart_img" domainObjectName="CartImg" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+-->
+        <!--<table tableName="t_msg_imgs" domainObjectName="MsgImgs" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+        <table tableName="t_small_img" domainObjectName="SmallImg" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
+    </context>
+</generatorConfiguration>

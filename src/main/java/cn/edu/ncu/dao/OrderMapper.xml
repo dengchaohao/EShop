@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ncu.dao.OrderMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ncu.pojo.Order" >
+    <id column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="ADDRESS_ID" property="addressId" jdbcType="DECIMAL" />
+    <result column="PAYMENT" property="payment" jdbcType="DECIMAL" />
+    <result column="PAYMENT_TYPE" property="paymentType" jdbcType="VARCHAR" />
+    <result column="POST_FEE" property="postFee" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="PAYMENT_TIME" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="CONSIGN_TIME" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="CLOSE_TIME" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="BUYER_RATE" property="buyerRate" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="queryOrderAndAddressByOrderId" parameterType="string" resultType="OrderAndAddressDTO">
+        select order_id orderId, status,contact, mobile,area, name city,province,address,PAYMENT_TYPE paymentType,PAYMENT,POST_FEE,CREATE_TIME createTime from
+        t_address ad join t_order ord on ad.address_id = ord.address_id
+        join t_area a on a.area_id = ad.area_id
+        join t_city c on a.city_id = c.city_id
+        join t_province p on p.province_id = c.province_id
+        where ord.order_id = #{orderId}
+  </select>
+
+  <select id="insertOrderAndOrderDetail" parameterType="Map" statementType="CALLABLE">
+        {call prg_place_order(
+            #{p_goods,jdbcType=VARCHAR,mode=IN},
+            #{p_spec,jdbcType=VARCHAR,mode=IN},
+            #{p_num,jdbcType=VARCHAR,mode=IN},
+            #{p_postFee,jdbcType=DOUBLE,mode=IN},
+            #{p_payment,jdbcType=DOUBLE,mode=IN},
+            #{p_paymentType,jdbcType=VARCHAR,mode=IN},
+            #{p_orderId,jdbcType=VARCHAR,mode=IN},
+            #{p_shopper,jdbcType=VARCHAR,mode=IN},
+            #{p_address,jdbcType=INTEGER,mode=IN},
+            #{p_success,mode=OUT,jdbcType=VARCHAR}
+        )}
+  </select>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ORDER_ID, USERNAME, ADDRESS_ID, PAYMENT, PAYMENT_TYPE, POST_FEE, STATUS, CREATE_TIME, 
+    UPDATE_TIME, PAYMENT_TIME, CONSIGN_TIME, END_TIME, CLOSE_TIME, BUYER_RATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.ncu.pojo.OrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from T_ORDER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ORDER
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_ORDER
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.edu.ncu.pojo.OrderExample" >
+    delete from T_ORDER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ncu.pojo.Order" >
+    insert into T_ORDER (ORDER_ID, USERNAME, ADDRESS_ID, 
+      PAYMENT, PAYMENT_TYPE, POST_FEE, 
+      STATUS, CREATE_TIME, UPDATE_TIME, 
+      PAYMENT_TIME, CONSIGN_TIME, END_TIME, 
+      CLOSE_TIME, BUYER_RATE)
+    values (#{orderId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{addressId,jdbcType=DECIMAL}, 
+      #{payment,jdbcType=DECIMAL}, #{paymentType,jdbcType=VARCHAR}, #{postFee,jdbcType=DECIMAL}, 
+      #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{paymentTime,jdbcType=TIMESTAMP}, #{consignTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{closeTime,jdbcType=TIMESTAMP}, #{buyerRate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ncu.pojo.Order" >
+    insert into T_ORDER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        ORDER_ID,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="addressId != null" >
+        ADDRESS_ID,
+      </if>
+      <if test="payment != null" >
+        PAYMENT,
+      </if>
+      <if test="paymentType != null" >
+        PAYMENT_TYPE,
+      </if>
+      <if test="postFee != null" >
+        POST_FEE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="paymentTime != null" >
+        PAYMENT_TIME,
+      </if>
+      <if test="consignTime != null" >
+        CONSIGN_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
+      <if test="closeTime != null" >
+        CLOSE_TIME,
+      </if>
+      <if test="buyerRate != null" >
+        BUYER_RATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=DECIMAL},
+      </if>
+      <if test="payment != null" >
+        #{payment,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentType != null" >
+        #{paymentType,jdbcType=VARCHAR},
+      </if>
+      <if test="postFee != null" >
+        #{postFee,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentTime != null" >
+        #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consignTime != null" >
+        #{consignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeTime != null" >
+        #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buyerRate != null" >
+        #{buyerRate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.edu.ncu.pojo.OrderExample" resultType="java.lang.Integer" >
+    select count(*) from T_ORDER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_ORDER
+    <set >
+      <if test="record.orderId != null" >
+        ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null" >
+        USERNAME = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressId != null" >
+        ADDRESS_ID = #{record.addressId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payment != null" >
+        PAYMENT = #{record.payment,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paymentType != null" >
+        PAYMENT_TYPE = #{record.paymentType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postFee != null" >
+        POST_FEE = #{record.postFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paymentTime != null" >
+        PAYMENT_TIME = #{record.paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.consignTime != null" >
+        CONSIGN_TIME = #{record.consignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        END_TIME = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.closeTime != null" >
+        CLOSE_TIME = #{record.closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.buyerRate != null" >
+        BUYER_RATE = #{record.buyerRate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_ORDER
+    set ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      USERNAME = #{record.username,jdbcType=VARCHAR},
+      ADDRESS_ID = #{record.addressId,jdbcType=DECIMAL},
+      PAYMENT = #{record.payment,jdbcType=DECIMAL},
+      PAYMENT_TYPE = #{record.paymentType,jdbcType=VARCHAR},
+      POST_FEE = #{record.postFee,jdbcType=DECIMAL},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      PAYMENT_TIME = #{record.paymentTime,jdbcType=TIMESTAMP},
+      CONSIGN_TIME = #{record.consignTime,jdbcType=TIMESTAMP},
+      END_TIME = #{record.endTime,jdbcType=TIMESTAMP},
+      CLOSE_TIME = #{record.closeTime,jdbcType=TIMESTAMP},
+      BUYER_RATE = #{record.buyerRate,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ncu.pojo.Order" >
+    update T_ORDER
+    <set >
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="addressId != null" >
+        ADDRESS_ID = #{addressId,jdbcType=DECIMAL},
+      </if>
+      <if test="payment != null" >
+        PAYMENT = #{payment,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentType != null" >
+        PAYMENT_TYPE = #{paymentType,jdbcType=VARCHAR},
+      </if>
+      <if test="postFee != null" >
+        POST_FEE = #{postFee,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentTime != null" >
+        PAYMENT_TIME = #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consignTime != null" >
+        CONSIGN_TIME = #{consignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeTime != null" >
+        CLOSE_TIME = #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buyerRate != null" >
+        BUYER_RATE = #{buyerRate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ncu.pojo.Order" >
+    update T_ORDER
+    set USERNAME = #{username,jdbcType=VARCHAR},
+      ADDRESS_ID = #{addressId,jdbcType=DECIMAL},
+      PAYMENT = #{payment,jdbcType=DECIMAL},
+      PAYMENT_TYPE = #{paymentType,jdbcType=VARCHAR},
+      POST_FEE = #{postFee,jdbcType=DECIMAL},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      PAYMENT_TIME = #{paymentTime,jdbcType=TIMESTAMP},
+      CONSIGN_TIME = #{consignTime,jdbcType=TIMESTAMP},
+      END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      CLOSE_TIME = #{closeTime,jdbcType=TIMESTAMP},
+      BUYER_RATE = #{buyerRate,jdbcType=VARCHAR}
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </update>
+</mapper>

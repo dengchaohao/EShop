@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--mybatis的主配置文件，添加数据库连接相关配置信息-->
+<configuration>
+
+    <!--对所有实体类进行取别名-->
+    <typeAliases>
+        <package name="cn.edu.ncu.pojo"/>
+    </typeAliases>
+
+    <!--分页插件，在数据库查询的时候能够使用分页插件-->
+    <!--<plugins>
+        &lt;!&ndash; com.github.pagehelper 为 PageHelper 类所在包名 &ndash;&gt;
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="dialect" value="oracle" />
+            &lt;!&ndash; 该参数默认为 false &ndash;&gt;
+            &lt;!&ndash; 设置为 true 时，会将 RowBounds 第一个参数 offset 当成 pageNum 页码使用 &ndash;&gt;
+            &lt;!&ndash; 和 startPage 中的 pageNum 效果一样 &ndash;&gt;
+            <property name="offsetAsPageNum" value="true" />
+            &lt;!&ndash; 该参数默认为 false &ndash;&gt;
+            &lt;!&ndash; 设置为 true 时，使用 RowBounds 分页会进行 count 查询 &ndash;&gt;
+            <property name="rowBoundsWithCount" value="true" />
+            &lt;!&ndash; 设置为 true 时，如果 pageSize=0 或者 RowBounds.limit = 0 就会查询出全 部的结果 &ndash;&gt;
+            &lt;!&ndash; （相当于没有执行分页查询，但是返回结果仍然是 Page 类型） &ndash;&gt;
+            <property name="pageSizeZero" value="true" />
+            &lt;!&ndash; 3.3.0 版本可用 - 分页参数合理化，默认 false 禁用 &ndash;&gt;
+            &lt;!&ndash; 启用合理化时，如果 pageNum<1 会查询第一页，如果 pageNum>pages 会查询 最后一页 &ndash;&gt;
+            &lt;!&ndash; 禁用合理化时，如果 pageNum<1 或 pageNum>pages 会返回空数据 &ndash;&gt;
+            <property name="reasonable" value="true" />
+            &lt;!&ndash; 3.5.0 版本可用 - 为了支持 startPage(Object params)方法 &ndash;&gt;
+            &lt;!&ndash; 增加了一个`params`参数来配置参数映射，用于从 Map 或 ServletRequest 中取值 &ndash;&gt;
+            &lt;!&ndash; 可以配置 pageNum,pageSize,count,pageSizeZero,reasonable,不配置映射 的用默认值 &ndash;&gt;
+            <property name="params" value="pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=countsql" />
+        </plugin>
+    </plugins>-->
+</configuration>
+
+
+
+
+

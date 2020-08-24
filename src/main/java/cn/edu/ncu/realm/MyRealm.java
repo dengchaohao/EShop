@@ -43,10 +43,6 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 获取当前用户的用户名
         String username = (String) principalCollection.getPrimaryPrincipal();
-        // 查询当前用户的所有 权限信息：RoleService:public List<String:Rolename> queryAllRolesByUsername(String username)
-                             //     PermissionService:public List<String:Permissionname> queryAllPermissionsByUsername(String Username)
-        //RoleService roleService = ContextLoader.getCurrentWebApplicationContext().getBean("roleServiceImpl", RoleService.class);
-        //PermissionService permissionService = ContextLoader.getCurrentWebApplicationContext().getBean("permissionServiceImpl", PermissionService.class);
         // 查询用户当前的权限信息
         Set<String> roles = roleService.queryAllRolenameByUsername(username);
         Set<String> perms = permissionService.queryALLPermissionsByUsername(username);
@@ -74,12 +70,6 @@ public class MyRealm extends AuthorizingRealm {
         if(user == null){ // 不存在用户名
             return null; // 在后续流程中会抛出异常 UnknowAccountException
         }
-
-        // 将用户信息封装在 AuthenticationInfo 中
-        /*return new SimpleAuthenticationInfo(user.getUsername(), // 数据库中的用户名
-                user.getPassword(), // 数据库中的密码
-                this.getName()); // realm的标识*/
-
         // 将用户信息封装在 AuthenticationInfo 中
         return new SimpleAuthenticationInfo(user.getUsername(), // 数据库中的用户名
                 user.getPassword(), // 数据库中的密码

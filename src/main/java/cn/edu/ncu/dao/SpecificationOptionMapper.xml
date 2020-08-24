@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ncu.dao.SpecificationOptionMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ncu.pojo.SpecificationOption" >
+    <id column="SPEC_OPTION_ID" property="specOptionId" jdbcType="DECIMAL" />
+    <result column="SPEC_ID" property="specId" jdbcType="DECIMAL" />
+    <result column="SEPC_NAME" property="sepcName" jdbcType="VARCHAR" />
+    <result column="prosmall_picture_url" property="prosmallPictureUrl" jdbcType="VARCHAR" />
+    <result column="proBig_picture_url" property="probigPictureUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SPEC_OPTION_ID, SPEC_ID, SEPC_NAME, prosmall_picture_url, proBig_picture_url
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.ncu.pojo.SpecificationOptionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from T_SPEC_OPTION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SPEC_OPTION
+    where SPEC_OPTION_ID = #{specOptionId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from T_SPEC_OPTION
+    where SPEC_OPTION_ID = #{specOptionId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.edu.ncu.pojo.SpecificationOptionExample" >
+    delete from T_SPEC_OPTION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ncu.pojo.SpecificationOption" >
+    insert into T_SPEC_OPTION (SPEC_OPTION_ID, SPEC_ID, SEPC_NAME, 
+      prosmall_picture_url, proBig_picture_url)
+    values (#{specOptionId,jdbcType=DECIMAL}, #{specId,jdbcType=DECIMAL}, #{sepcName,jdbcType=VARCHAR}, 
+      #{prosmallPictureUrl,jdbcType=VARCHAR}, #{probigPictureUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ncu.pojo.SpecificationOption" >
+    insert into T_SPEC_OPTION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="specOptionId != null" >
+        SPEC_OPTION_ID,
+      </if>
+      <if test="specId != null" >
+        SPEC_ID,
+      </if>
+      <if test="sepcName != null" >
+        SEPC_NAME,
+      </if>
+      <if test="prosmallPictureUrl != null" >
+        prosmall_picture_url,
+      </if>
+      <if test="probigPictureUrl != null" >
+        proBig_picture_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="specOptionId != null" >
+        #{specOptionId,jdbcType=DECIMAL},
+      </if>
+      <if test="specId != null" >
+        #{specId,jdbcType=DECIMAL},
+      </if>
+      <if test="sepcName != null" >
+        #{sepcName,jdbcType=VARCHAR},
+      </if>
+      <if test="prosmallPictureUrl != null" >
+        #{prosmallPictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="probigPictureUrl != null" >
+        #{probigPictureUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.edu.ncu.pojo.SpecificationOptionExample" resultType="java.lang.Integer" >
+    select count(*) from T_SPEC_OPTION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SPEC_OPTION
+    <set >
+      <if test="record.specOptionId != null" >
+        SPEC_OPTION_ID = #{record.specOptionId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.specId != null" >
+        SPEC_ID = #{record.specId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sepcName != null" >
+        SEPC_NAME = #{record.sepcName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prosmallPictureUrl != null" >
+        prosmall_picture_url = #{record.prosmallPictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.probigPictureUrl != null" >
+        proBig_picture_url = #{record.probigPictureUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SPEC_OPTION
+    set SPEC_OPTION_ID = #{record.specOptionId,jdbcType=DECIMAL},
+      SPEC_ID = #{record.specId,jdbcType=DECIMAL},
+      SEPC_NAME = #{record.sepcName,jdbcType=VARCHAR},
+      prosmall_picture_url = #{record.prosmallPictureUrl,jdbcType=VARCHAR},
+      proBig_picture_url = #{record.probigPictureUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ncu.pojo.SpecificationOption" >
+    update T_SPEC_OPTION
+    <set >
+      <if test="specId != null" >
+        SPEC_ID = #{specId,jdbcType=DECIMAL},
+      </if>
+      <if test="sepcName != null" >
+        SEPC_NAME = #{sepcName,jdbcType=VARCHAR},
+      </if>
+      <if test="prosmallPictureUrl != null" >
+        prosmall_picture_url = #{prosmallPictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="probigPictureUrl != null" >
+        proBig_picture_url = #{probigPictureUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SPEC_OPTION_ID = #{specOptionId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ncu.pojo.SpecificationOption" >
+    update T_SPEC_OPTION
+    set SPEC_ID = #{specId,jdbcType=DECIMAL},
+      SEPC_NAME = #{sepcName,jdbcType=VARCHAR},
+      prosmall_picture_url = #{prosmallPictureUrl,jdbcType=VARCHAR},
+      proBig_picture_url = #{probigPictureUrl,jdbcType=VARCHAR}
+    where SPEC_OPTION_ID = #{specOptionId,jdbcType=DECIMAL}
+  </update>
+</mapper>

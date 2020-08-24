@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.ncu.dao.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.ncu.pojo.Goods" >
+    <id column="GOODS_ID" property="goodsId" jdbcType="DECIMAL" />
+    <result column="SPEC_OPTION_ID" property="specOptionId" jdbcType="DECIMAL" />
+    <result column="CONTENT_ID" property="contentId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+    <result column="STOCK" property="stock" jdbcType="DECIMAL" />
+    <result column="IS_MARKETABLE" property="isMarketable" jdbcType="VARCHAR" />
+    <result column="CATEGORY_ONE" property="categoryOne" jdbcType="VARCHAR" />
+    <result column="CATEGORY_TWO" property="categoryTwo" jdbcType="VARCHAR" />
+    <result column="STYLE" property="style" jdbcType="VARCHAR" />
+    <result column="PRODET_PIC" property="prodetPic" jdbcType="VARCHAR" />
+    <result column="INTRODUCTION" property="introduction" jdbcType="VARCHAR" />
+    <result column="SPEC_ID" property="specId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    GOODS_ID, SPEC_OPTION_ID, CONTENT_ID, NAME, PRICE, STOCK, IS_MARKETABLE, CATEGORY_ONE, 
+    CATEGORY_TWO, STYLE, PRODET_PIC, INTRODUCTION, SPEC_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.ncu.pojo.GoodsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from T_GOODS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_GOODS
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from T_GOODS
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.edu.ncu.pojo.GoodsExample" >
+    delete from T_GOODS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.edu.ncu.pojo.Goods" >
+    insert into T_GOODS (GOODS_ID, SPEC_OPTION_ID, CONTENT_ID, 
+      NAME, PRICE, STOCK, 
+      IS_MARKETABLE, CATEGORY_ONE, CATEGORY_TWO, 
+      STYLE, PRODET_PIC, INTRODUCTION, 
+      SPEC_ID)
+    values (#{goodsId,jdbcType=DECIMAL}, #{specOptionId,jdbcType=DECIMAL}, #{contentId,jdbcType=DECIMAL}, 
+      #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{stock,jdbcType=DECIMAL}, 
+      #{isMarketable,jdbcType=VARCHAR}, #{categoryOne,jdbcType=VARCHAR}, #{categoryTwo,jdbcType=VARCHAR}, 
+      #{style,jdbcType=VARCHAR}, #{prodetPic,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, 
+      #{specId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.ncu.pojo.Goods" >
+    insert into T_GOODS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        GOODS_ID,
+      </if>
+      <if test="specOptionId != null" >
+        SPEC_OPTION_ID,
+      </if>
+      <if test="contentId != null" >
+        CONTENT_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="price != null" >
+        PRICE,
+      </if>
+      <if test="stock != null" >
+        STOCK,
+      </if>
+      <if test="isMarketable != null" >
+        IS_MARKETABLE,
+      </if>
+      <if test="categoryOne != null" >
+        CATEGORY_ONE,
+      </if>
+      <if test="categoryTwo != null" >
+        CATEGORY_TWO,
+      </if>
+      <if test="style != null" >
+        STYLE,
+      </if>
+      <if test="prodetPic != null" >
+        PRODET_PIC,
+      </if>
+      <if test="introduction != null" >
+        INTRODUCTION,
+      </if>
+      <if test="specId != null" >
+        SPEC_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=DECIMAL},
+      </if>
+      <if test="specOptionId != null" >
+        #{specOptionId,jdbcType=DECIMAL},
+      </if>
+      <if test="contentId != null" >
+        #{contentId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=DECIMAL},
+      </if>
+      <if test="isMarketable != null" >
+        #{isMarketable,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryOne != null" >
+        #{categoryOne,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryTwo != null" >
+        #{categoryTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="prodetPic != null" >
+        #{prodetPic,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="specId != null" >
+        #{specId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.edu.ncu.pojo.GoodsExample" resultType="java.lang.Integer" >
+    select count(*) from T_GOODS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_GOODS
+    <set >
+      <if test="record.goodsId != null" >
+        GOODS_ID = #{record.goodsId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.specOptionId != null" >
+        SPEC_OPTION_ID = #{record.specOptionId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.contentId != null" >
+        CONTENT_ID = #{record.contentId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        PRICE = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stock != null" >
+        STOCK = #{record.stock,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isMarketable != null" >
+        IS_MARKETABLE = #{record.isMarketable,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryOne != null" >
+        CATEGORY_ONE = #{record.categoryOne,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryTwo != null" >
+        CATEGORY_TWO = #{record.categoryTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.style != null" >
+        STYLE = #{record.style,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodetPic != null" >
+        PRODET_PIC = #{record.prodetPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduction != null" >
+        INTRODUCTION = #{record.introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specId != null" >
+        SPEC_ID = #{record.specId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_GOODS
+    set GOODS_ID = #{record.goodsId,jdbcType=DECIMAL},
+      SPEC_OPTION_ID = #{record.specOptionId,jdbcType=DECIMAL},
+      CONTENT_ID = #{record.contentId,jdbcType=DECIMAL},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      PRICE = #{record.price,jdbcType=DECIMAL},
+      STOCK = #{record.stock,jdbcType=DECIMAL},
+      IS_MARKETABLE = #{record.isMarketable,jdbcType=VARCHAR},
+      CATEGORY_ONE = #{record.categoryOne,jdbcType=VARCHAR},
+      CATEGORY_TWO = #{record.categoryTwo,jdbcType=VARCHAR},
+      STYLE = #{record.style,jdbcType=VARCHAR},
+      PRODET_PIC = #{record.prodetPic,jdbcType=VARCHAR},
+      INTRODUCTION = #{record.introduction,jdbcType=VARCHAR},
+      SPEC_ID = #{record.specId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.ncu.pojo.Goods" >
+    update T_GOODS
+    <set >
+      <if test="specOptionId != null" >
+        SPEC_OPTION_ID = #{specOptionId,jdbcType=DECIMAL},
+      </if>
+      <if test="contentId != null" >
+        CONTENT_ID = #{contentId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        PRICE = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        STOCK = #{stock,jdbcType=DECIMAL},
+      </if>
+      <if test="isMarketable != null" >
+        IS_MARKETABLE = #{isMarketable,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryOne != null" >
+        CATEGORY_ONE = #{categoryOne,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryTwo != null" >
+        CATEGORY_TWO = #{categoryTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        STYLE = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="prodetPic != null" >
+        PRODET_PIC = #{prodetPic,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        INTRODUCTION = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="specId != null" >
+        SPEC_ID = #{specId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.ncu.pojo.Goods" >
+    update T_GOODS
+    set SPEC_OPTION_ID = #{specOptionId,jdbcType=DECIMAL},
+      CONTENT_ID = #{contentId,jdbcType=DECIMAL},
+      NAME = #{name,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=DECIMAL},
+      STOCK = #{stock,jdbcType=DECIMAL},
+      IS_MARKETABLE = #{isMarketable,jdbcType=VARCHAR},
+      CATEGORY_ONE = #{categoryOne,jdbcType=VARCHAR},
+      CATEGORY_TWO = #{categoryTwo,jdbcType=VARCHAR},
+      STYLE = #{style,jdbcType=VARCHAR},
+      PRODET_PIC = #{prodetPic,jdbcType=VARCHAR},
+      INTRODUCTION = #{introduction,jdbcType=VARCHAR},
+      SPEC_ID = #{specId,jdbcType=VARCHAR}
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </update>
+</mapper>
